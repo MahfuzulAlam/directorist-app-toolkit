@@ -11,7 +11,7 @@
  * Plugin Name:       Directorist App Toolkit
  * Plugin URI:        https://github.com/syedgalib/directorist-app-toolkit
  * Description:       Manage your Directorist mobile app with this extension
- * Version:           1.0.0
+ * Version:           2.0.0
  * Requires at least: 5.2
  * Requires PHP:      7.2
  * Author:            wpWax
@@ -36,7 +36,7 @@ if ( ! class_exists( 'DirectoristAppToolkit' ) ) {
     }
 
     if ( ! defined( 'DIRECTORIST_APP_TOOLKIT_VERSION' ) ) {
-        define( 'DIRECTORIST_APP_TOOLKIT_VERSION', '1.0.0' );
+        define( 'DIRECTORIST_APP_TOOLKIT_VERSION', '2.0.0' );
     }
 
     include dirname( __FILE__ ) . '/app.php';

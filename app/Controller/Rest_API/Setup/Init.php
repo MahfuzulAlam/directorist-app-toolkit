@@ -3,7 +3,7 @@
  * Initialize Rest API Setup
  *
  * @package DirectoristAppToolkit\Controller\Rest_API\Setup
- * @version  1.0.0
+ * @version  2.0.0
  */
 
 namespace DirectoristAppToolkit\Controller\Rest_API\Setup;

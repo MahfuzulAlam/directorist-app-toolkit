@@ -3,7 +3,7 @@
  * Rest User Meta Controller
  *
  * @package DirectoristAppToolkit\Controller\Rest_API\Version_1
- * @version  1.0.0
+ * @version  2.0.0
  */
 
 namespace DirectoristAppToolkit\Controller\Rest_API\Version_1\Users;
