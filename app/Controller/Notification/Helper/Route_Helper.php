@@ -4,7 +4,7 @@ namespace DirectoristAppToolkit\Controller\Notification\Helper;
 
 trait Route_Helper {
     public static function get_route( $document_id = '' ) {
-        $project_id = get_directorist_option('app_firebase_project_id', '', true);
+        $project_id = directorist_app_toolkit_get_setting( 'app_firebase_project_id', '' );
 
         return "https://firestore.googleapis.com/v1/projects/{$project_id}/databases/(default)/documents/notifications/{$document_id}/notifications";
     }

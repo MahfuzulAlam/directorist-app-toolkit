@@ -9,6 +9,7 @@
 namespace DirectoristAppToolkit\Controller\Rest_API\Version_1\Admin_Settings;
 
 use DirectoristAppToolkit\Controller\Rest_API\Version_1\Helper\Rest_Base;
+use DirectoristAppToolkit\Helper\App_Settings as Settings_Helper;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -76,14 +77,16 @@ class Admin_Settings extends Rest_Base {
 		$_raw_settings = get_option('atbdp_option');
 		$settings      = [];
 
-		if ( empty( $_raw_settings ) || ! is_array( $_raw_settings ) ) {
-			return rest_ensure_response( $settings );
+		if ( ! is_array( $_raw_settings ) ) {
+			$_raw_settings = [];
 		}
 
 		foreach ( $this->available_settings as $setting_key => $rest_key ) {
 			$rest_key = is_null( $rest_key ) ? $setting_key : $rest_key;
 
-			if ( isset( $_raw_settings[ $setting_key ] ) ) {
+			if ( Settings_Helper::has_field( $setting_key ) ) {
+				$settings[ $rest_key ] = directorist_app_toolkit_get_setting( $setting_key );
+			} elseif ( isset( $_raw_settings[ $setting_key ] ) ) {
 				$settings[ $rest_key ] = $_raw_settings[ $setting_key ];
 			} else {
 				$settings[ $rest_key ] = null;

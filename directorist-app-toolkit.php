@@ -23,5 +23,21 @@
  */
 
 if ( ! class_exists( 'DirectoristAppToolkit' ) ) {
+    if ( ! defined( 'DIRECTORIST_APP_TOOLKIT_FILE' ) ) {
+        define( 'DIRECTORIST_APP_TOOLKIT_FILE', __FILE__ );
+    }
+
+    if ( ! defined( 'DIRECTORIST_APP_TOOLKIT_PATH' ) ) {
+        define( 'DIRECTORIST_APP_TOOLKIT_PATH', plugin_dir_path( __FILE__ ) );
+    }
+
+    if ( ! defined( 'DIRECTORIST_APP_TOOLKIT_URL' ) ) {
+        define( 'DIRECTORIST_APP_TOOLKIT_URL', plugin_dir_url( __FILE__ ) );
+    }
+
+    if ( ! defined( 'DIRECTORIST_APP_TOOLKIT_VERSION' ) ) {
+        define( 'DIRECTORIST_APP_TOOLKIT_VERSION', '1.0.0' );
+    }
+
     include dirname( __FILE__ ) . '/app.php';
 }
