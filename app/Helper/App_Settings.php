@@ -491,6 +491,55 @@ class App_Settings {
     }
 
     /**
+     * Validate a tab payload before saving.
+     *
+     * @param string $tab_key    Tab key.
+     * @param array  $raw_values Raw input values.
+     *
+     * @return array
+     */
+    public static function validate_tab_values( $tab_key, $raw_values ) {
+        $tab = self::get_tab( $tab_key );
+
+        if ( empty( $tab ) || ! is_array( $raw_values ) ) {
+            return [];
+        }
+
+        $errors = [];
+
+        foreach ( $tab['fields'] as $field_key => $field ) {
+            if ( self::is_section_field( $field ) || empty( $field['type'] ) || 'json' !== $field['type'] ) {
+                continue;
+            }
+
+            $value = array_key_exists( $field_key, $raw_values ) ? $raw_values[ $field_key ] : '';
+
+            if ( is_string( $value ) ) {
+                $value = wp_unslash( $value );
+            }
+
+            $value = trim( (string) $value );
+
+            if ( '' === $value ) {
+                continue;
+            }
+
+            json_decode( $value, true );
+
+            if ( JSON_ERROR_NONE !== json_last_error() ) {
+                $errors[ $field_key ] = sprintf(
+                    /* translators: 1: field label, 2: JSON error message */
+                    __( '%1$s must contain valid JSON. Error: %2$s', 'directorist-app-toolkit' ),
+                    isset( $field['label'] ) ? $field['label'] : $field_key,
+                    json_last_error_msg()
+                );
+            }
+        }
+
+        return $errors;
+    }
+
+    /**
      * Get the legacy Directorist settings array.
      *
      * @return array

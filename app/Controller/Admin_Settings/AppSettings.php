@@ -159,6 +159,18 @@ class AppSettings {
         }
 
         $raw_settings = isset( $_POST['settings'] ) && is_array( $_POST['settings'] ) ? $_POST['settings'] : [];
+        $errors       = Settings_Helper::validate_tab_values( $tab_key, $raw_settings );
+
+        if ( ! empty( $errors ) ) {
+            wp_send_json_error(
+                [
+                    'message' => reset( $errors ),
+                    'errors'  => $errors,
+                ],
+                400
+            );
+        }
+
         $settings     = Settings_Helper::sanitize_tab_values( $tab_key, $raw_settings );
 
         update_option( $tab['option_key'], $settings, false );
