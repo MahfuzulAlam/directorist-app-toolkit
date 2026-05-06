@@ -210,7 +210,14 @@ class AppSettings {
                     <table class="form-table" role="presentation">
                         <tbody>
                             <?php foreach ( $tab['fields'] as $field_key => $field ) : ?>
-                                <?php $this->render_field_row( $field_key, $field, isset( $values[ $field_key ] ) ? $values[ $field_key ] : '' ); ?>
+                                <?php
+                                if ( Settings_Helper::is_section_field( $field ) ) {
+                                    $this->render_section_row( $field );
+                                    continue;
+                                }
+
+                                $this->render_field_row( $field_key, $field, isset( $values[ $field_key ] ) ? $values[ $field_key ] : '' );
+                                ?>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -227,6 +234,26 @@ class AppSettings {
                 </div>
             </form>
         </section>
+        <?php
+    }
+
+    /**
+     * Render a visual section row.
+     *
+     * @param array $field Field config.
+     *
+     * @return void
+     */
+    protected function render_section_row( $field ) {
+        ?>
+        <tr class="directorist-app-toolkit-section-row">
+            <th colspan="2">
+                <h3><?php echo esc_html( $field['label'] ); ?></h3>
+                <?php if ( ! empty( $field['description'] ) ) : ?>
+                    <p><?php echo esc_html( $field['description'] ); ?></p>
+                <?php endif; ?>
+            </th>
+        </tr>
         <?php
     }
 
@@ -262,6 +289,22 @@ class AppSettings {
 
                     case 'url':
                         $this->render_text_field( $field_key, $field_id, $field, $value, 'url' );
+                        break;
+
+                    case 'textarea':
+                        $this->render_textarea_field( $field_key, $field_id, $field, $value );
+                        break;
+
+                    case 'json':
+                        $this->render_json_field( $field_key, $field_id, $field, $value );
+                        break;
+
+                    case 'checkbox':
+                        $this->render_checkbox_field( $field_key, $field_id, $field, $value );
+                        break;
+
+                    case 'select':
+                        $this->render_select_field( $field_key, $field_id, $field, $value );
                         break;
 
                     default:
@@ -301,6 +344,72 @@ class AppSettings {
     }
 
     /**
+     * Render a textarea field.
+     *
+     * @param string $field_key Field key.
+     * @param string $field_id  Field ID.
+     * @param array  $field     Field config.
+     * @param mixed  $value     Field value.
+     *
+     * @return void
+     */
+    protected function render_textarea_field( $field_key, $field_id, $field, $value ) {
+        printf(
+            '<textarea class="large-text" id="%1$s" name="settings[%2$s]" rows="4" placeholder="%3$s">%4$s</textarea>',
+            esc_attr( $field_id ),
+            esc_attr( $field_key ),
+            esc_attr( isset( $field['placeholder'] ) ? $field['placeholder'] : '' ),
+            esc_textarea( (string) $value )
+        );
+    }
+
+    /**
+     * Render a JSON editor field.
+     *
+     * @param string $field_key Field key.
+     * @param string $field_id  Field ID.
+     * @param array  $field     Field config.
+     * @param mixed  $value     Field value.
+     *
+     * @return void
+     */
+    protected function render_json_field( $field_key, $field_id, $field, $value ) {
+        printf(
+            '<textarea class="large-text code directorist-app-toolkit-json-editor" id="%1$s" name="settings[%2$s]" rows="10" spellcheck="false" placeholder="%3$s">%4$s</textarea>',
+            esc_attr( $field_id ),
+            esc_attr( $field_key ),
+            esc_attr( isset( $field['placeholder'] ) ? $field['placeholder'] : '' ),
+            esc_textarea( (string) $value )
+        );
+    }
+
+    /**
+     * Render a checkbox field.
+     *
+     * @param string $field_key Field key.
+     * @param string $field_id  Field ID.
+     * @param array  $field     Field config.
+     * @param mixed  $value     Field value.
+     *
+     * @return void
+     */
+    protected function render_checkbox_field( $field_key, $field_id, $field, $value ) {
+        ?>
+        <input type="hidden" name="settings[<?php echo esc_attr( $field_key ); ?>]" value="0">
+        <label class="directorist-app-toolkit-checkbox-label" for="<?php echo esc_attr( $field_id ); ?>">
+            <input
+                type="checkbox"
+                id="<?php echo esc_attr( $field_id ); ?>"
+                name="settings[<?php echo esc_attr( $field_key ); ?>]"
+                value="1"
+                <?php checked( (bool) $value ); ?>
+            >
+            <?php esc_html_e( 'Enabled', 'directorist-app-toolkit' ); ?>
+        </label>
+        <?php
+    }
+
+    /**
      * Render a color picker field.
      *
      * @param string $field_key Field key.
@@ -318,6 +427,29 @@ class AppSettings {
             esc_attr( (string) $value ),
             esc_attr( isset( $field['default'] ) ? $field['default'] : '' )
         );
+    }
+
+    /**
+     * Render a select field.
+     *
+     * @param string $field_key Field key.
+     * @param string $field_id  Field ID.
+     * @param array  $field     Field config.
+     * @param mixed  $value     Field value.
+     *
+     * @return void
+     */
+    protected function render_select_field( $field_key, $field_id, $field, $value ) {
+        $options = isset( $field['options'] ) && is_array( $field['options'] ) ? $field['options'] : [];
+        ?>
+        <select id="<?php echo esc_attr( $field_id ); ?>" name="settings[<?php echo esc_attr( $field_key ); ?>]">
+            <?php foreach ( $options as $option_value => $option_label ) : ?>
+                <option value="<?php echo esc_attr( $option_value ); ?>" <?php selected( (string) $value, (string) $option_value ); ?>>
+                    <?php echo esc_html( $option_label ); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <?php
     }
 
     /**

@@ -54,14 +54,55 @@
     padding-left: 0;
     padding-top: 20px;
     padding-bottom: 20px;
-    vertical-align: middle;
+    vertical-align: top;
 }
 
 .directorist-app-toolkit-card .form-table td {
     padding-right: 0;
     padding-top: 20px;
     padding-bottom: 20px;
-    vertical-align: middle;
+    vertical-align: top;
+}
+
+.directorist-app-toolkit-card .large-text {
+    max-width: 640px;
+}
+
+.directorist-app-toolkit-card .description {
+    font-size: 12px;
+}
+
+.directorist-app-toolkit-section-row th {
+    padding-top: 28px;
+    padding-bottom: 8px;
+    border-top: 1px solid #f0f0f1;
+}
+
+.directorist-app-toolkit-section-row h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.directorist-app-toolkit-section-row p {
+    margin: 0;
+    color: #646970;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.directorist-app-toolkit-json-editor {
+    max-height: calc(1.5em * 20 + 16px);
+    overflow: auto;
+    font-family: Consolas, Monaco, monospace;
+    line-height: 1.5;
+    resize: vertical;
+}
+
+.directorist-app-toolkit-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .directorist-app-toolkit-card__footer {
