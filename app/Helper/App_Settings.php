@@ -36,7 +36,8 @@ class App_Settings {
                     'app_id'                               => [
                         'label'       => __( 'App ID', 'directorist-app-toolkit' ),
                         'type'        => 'text',
-                        'default'     => '',
+                        'default'     => self::get_default_app_id(),
+                        'use_default_when_empty' => true,
                         'placeholder' => __( 'com.example.directory', 'directorist-app-toolkit' ),
                         'description' => __( 'The unique identifier used by the mobile app build or external app services.', 'directorist-app-toolkit' ),
                     ],
@@ -397,12 +398,12 @@ class App_Settings {
                 continue;
             }
 
-            if ( is_array( $stored_values ) && array_key_exists( $field_key, $stored_values ) ) {
+            if ( is_array( $stored_values ) && array_key_exists( $field_key, $stored_values ) && ! self::should_use_default_for_empty_value( $stored_values[ $field_key ], $field ) ) {
                 $values[ $field_key ] = self::prepare_field_value( $stored_values[ $field_key ], $field );
                 continue;
             }
 
-            if ( array_key_exists( $field_key, $legacy_values ) ) {
+            if ( array_key_exists( $field_key, $legacy_values ) && ! self::should_use_default_for_empty_value( $legacy_values[ $field_key ], $field ) ) {
                 $values[ $field_key ] = self::prepare_field_value( $legacy_values[ $field_key ], $field );
                 continue;
             }
@@ -548,6 +549,47 @@ class App_Settings {
         $settings = get_option( 'atbdp_option', [] );
 
         return is_array( $settings ) ? $settings : [];
+    }
+
+    /**
+     * Build the default app ID from the WordPress website address.
+     *
+     * @return string
+     */
+    protected static function get_default_app_id() {
+        $host = wp_parse_url( home_url( '/' ), PHP_URL_HOST );
+
+        if ( empty( $host ) ) {
+            return 'com.site.app';
+        }
+
+        $host  = strtolower( preg_replace( '/^www\./', '', $host ) );
+        $parts = array_values( array_filter( explode( '.', $host ) ) );
+
+        if ( empty( $parts ) ) {
+            return 'com.site.app';
+        }
+
+        $core_domain = count( $parts ) > 1 ? $parts[ count( $parts ) - 2 ] : $parts[0];
+        $core_domain = preg_replace( '/[^a-z0-9]+/', '', $core_domain );
+
+        if ( '' === $core_domain ) {
+            $core_domain = 'site';
+        }
+
+        return sprintf( 'com.%s.app', $core_domain );
+    }
+
+    /**
+     * Determine if an empty value should fall back to the field default.
+     *
+     * @param mixed $value Field value.
+     * @param array $field Field config.
+     *
+     * @return bool
+     */
+    protected static function should_use_default_for_empty_value( $value, $field ) {
+        return ! empty( $field['use_default_when_empty'] ) && '' === trim( (string) $value );
     }
 
     /**
