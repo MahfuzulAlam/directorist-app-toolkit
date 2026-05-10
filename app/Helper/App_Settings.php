@@ -105,6 +105,22 @@ class App_Settings {
                         'preview_text' => __( 'App icon preview', 'directorist-app-toolkit' ),
                         'description'  => __( 'Used anywhere the mobile app needs a compact brand mark, such as splash or launcher-style surfaces.', 'directorist-app-toolkit' ),
                     ],
+                    'app_show_splash_screen'   => [
+                        'label'       => __( 'Show Splash Screen', 'directorist-app-toolkit' ),
+                        'type'        => 'checkbox',
+                        'default'     => false,
+                        'description' => __( 'Controls whether the splash screen is displayed during app launch.', 'directorist-app-toolkit' ),
+                    ],
+                    'app_splash_screen_image'  => [
+                        'label'        => __( 'Splash Screen Image', 'directorist-app-toolkit' ),
+                        'type'         => 'media',
+                        'default'      => '',
+                        'placeholder'  => __( 'Paste or select a splash screen image URL', 'directorist-app-toolkit' ),
+                        'button_text'  => __( 'Choose Splash Image', 'directorist-app-toolkit' ),
+                        'remove_text'  => __( 'Remove Splash Image', 'directorist-app-toolkit' ),
+                        'preview_text' => __( 'Splash screen image preview', 'directorist-app-toolkit' ),
+                        'description'  => __( 'Used as the splash screen image shown when the app launches.', 'directorist-app-toolkit' ),
+                    ],
                     'app_font'                 => [
                         'label'       => __( 'Font', 'directorist-app-toolkit' ),
                         'type'        => 'select',
