@@ -321,6 +321,13 @@ class App_Settings {
                         'placeholder' => __( "{\n  \"sections\": []\n}", 'directorist-app-toolkit' ),
                         'description' => __( 'JSON configuration for the app homepage layout, including sections, ordering, and screen-specific display rules.', 'directorist-app-toolkit' ),
                     ],
+                    'app_layout_all_listings'      => [
+                        'label'       => __( 'All Listings', 'directorist-app-toolkit' ),
+                        'type'        => 'json',
+                        'default'     => '',
+                        'placeholder' => __( "{\n  \"sections\": []\n}", 'directorist-app-toolkit' ),
+                        'description' => __( 'JSON configuration for the all listings screen, including sections, ordering, and screen-specific display rules.', 'directorist-app-toolkit' ),
+                    ],
                     'app_layout_single_listing'    => [
                         'label'       => __( 'Single Listing', 'directorist-app-toolkit' ),
                         'type'        => 'json',
